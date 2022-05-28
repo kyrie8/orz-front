@@ -2,7 +2,7 @@ import { AxiosRequestConfig } from 'axios'
 import Request from './request'
 
 const request = new Request({
-  baseURL: 'baidu.com',
+  baseURL: 'http://localhost:3000/',
   timeout: 100000,
   interceptors: {
     requestInterceptors: (config: AxiosRequestConfig) => {
