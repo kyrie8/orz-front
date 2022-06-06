@@ -17,7 +17,7 @@ type IUser = {
   user_id: number
   username: string
 }
-type IResultData = {
+export type IResultData = {
   auth: string[]
   token: string
   menu: IMenu[]

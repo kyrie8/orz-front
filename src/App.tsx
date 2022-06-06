@@ -1,4 +1,6 @@
 import { memo } from 'react'
+import { Provider } from 'react-redux'
+import { store } from '@/store'
 import {
   unstable_HistoryRouter as HistoryRouter,
   Route,
@@ -10,17 +12,19 @@ import { createBrowserHistory } from 'history'
 import Login from '@/view/login/Index'
 import Layout from '@/view/layout/Index'
 
-const history = createBrowserHistory({ window })
+export const history = createBrowserHistory({ window })
 
 function App() {
   return (
-    <HistoryRouter history={history}>
-      <Routes>
-        <Route path="/" element={<Navigate replace to="/home" />}></Route>
-        <Route path="/home" element={<Layout />}></Route>
-        <Route path="/login" element={<Login />}></Route>
-      </Routes>
-    </HistoryRouter>
+    <Provider store={store}>
+      <HistoryRouter history={history}>
+        <Routes>
+          <Route path="/" element={<Navigate replace to="/home" />}></Route>
+          <Route path="/home" element={<Layout />}></Route>
+          <Route path="/login" element={<Login />}></Route>
+        </Routes>
+      </HistoryRouter>
+    </Provider>
   )
 }
 
