@@ -64,6 +64,10 @@ class Request {
   patch<T = unknown>(config: RequestConfig<T>): Promise<T> {
     return this.request<T>({ ...config, method: 'PATCH' })
   }
+
+  put<T = unknown>(config: RequestConfig<T>): Promise<T> {
+    return this.request<T>({ ...config, method: 'PUT' })
+  }
 }
 
 export default Request

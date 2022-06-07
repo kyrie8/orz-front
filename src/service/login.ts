@@ -2,7 +2,7 @@ import request from '@/api'
 
 import { IData, IMenu } from './type'
 
-type IAccount = { username: string; password: string }
+export type IAccount = { username: string; password: string }
 type IRoles = {
   remark: string
   role_id: number
@@ -17,14 +17,14 @@ type IUser = {
   user_id: number
   username: string
 }
-export type IResultData = {
+export type ILoginResult = {
   auth: string[]
   token: string
   menu: IMenu[]
   user: IUser
 }
 export function login(data: IAccount) {
-  return request.post<IData<IResultData>>({
+  return request.post<IData<ILoginResult>>({
     url: 'login',
     data,
   })

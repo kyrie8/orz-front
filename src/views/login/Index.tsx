@@ -3,16 +3,13 @@ import { memo } from 'react'
 import { Form, Input, Button } from 'antd'
 import styles from './login.module.less'
 
-import { login } from '@/service/login'
+import { login, IAccount } from '@/service/login'
 import { useAppDispatch } from '@/store/hook'
 import { asyncLogin } from '@/store/modules/userStore'
 
 function Login() {
   const dispatch = useAppDispatch()
-  const onFinish = async (v) => {
-    //const data = await login(v)
-    //console.log('data', data)
-    //TODO redux and Immer or immutable?
+  const onFinish = (v: IAccount) => {
     dispatch(asyncLogin(v))
   }
   return (
