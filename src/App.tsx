@@ -1,4 +1,4 @@
-import { memo, useEffect } from 'react'
+import { memo, useEffect, useState } from 'react'
 import {
   unstable_HistoryRouter as HistoryRouter,
   Route,
@@ -14,20 +14,20 @@ import Layout from '@/views/layout/Index'
 export const history = createBrowserHistory({ window })
 
 function App() {
-  const user = useAppSelector((state) => ({
+  const { token } = useAppSelector((state) => ({
     token: state.user.token,
   }))
+  const [routes, setRoutes] = useState([])
   useEffect(() => {
-    if (user.token) {
-      history.replace('/home')
+    if (!token) {
+      history.replace('/login')
       return
     }
-    history.replace('/login')
   }, [])
   return (
     <HistoryRouter history={history}>
       <Routes>
-        <Route path="/home" element={<Layout />}></Route>
+        <Route path="/*" element={<Layout />}></Route>
         <Route path="/login" element={<Login />}></Route>
       </Routes>
     </HistoryRouter>

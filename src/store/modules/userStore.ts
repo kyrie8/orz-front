@@ -1,7 +1,10 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { ILoginResult, login, IAccount } from '@/service/login'
-import Local from '@/utils/storage'
 import { history } from '@/App'
+import Local from '@/utils/storage'
+
+import routes from '@/router'
+
 const initialState: ILoginResult = Local.getStorage('user') || {
   auth: [],
   token: '',
@@ -16,15 +19,17 @@ const initialState: ILoginResult = Local.getStorage('user') || {
     username: '',
   },
 }
+
 export const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {},
   extraReducers: (build) => {
     build.addCase(asyncLogin.fulfilled, (state, { payload }) => {
-      const { auth, menu, token, user } = payload
+      const { auth, token, user } = payload
+      const menu = [...routes, ...payload.menu]
       Object.assign(state, { auth, menu, token, user })
-      Local.setStorage('user', payload)
+      Local.setStorage('user', { auth, menu, token, user })
       history.replace('/home')
     })
   },
