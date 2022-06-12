@@ -1,9 +1,10 @@
 import { configureStore } from '@reduxjs/toolkit'
 import userStore from './modules/userStore'
-
+import useSetting from './modules/useSetting'
 export const store = configureStore({
   reducer: {
     user: userStore,
+    setting: useSetting,
   },
 })
 

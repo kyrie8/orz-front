@@ -11,4 +11,5 @@ export interface IMenu {
   menu_name: string
   path: string
   icon: string
+  hidden: boolean
 }

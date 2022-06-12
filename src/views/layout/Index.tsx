@@ -15,6 +15,7 @@ import { IMenu } from '@/service/type'
 
 import NavBar from '../components/NavBar'
 import Tags from '../components/Tags'
+import { shallowEqual } from 'react-redux'
 
 const { Header, Sider, Content } = Layout
 
@@ -47,22 +48,24 @@ function getMenus(menus) {
   const menuArr = JSON.parse(JSON.stringify(menus))
   function changeKey(menu) {
     menu.forEach((item) => {
-      if (item.is_out_link) {
-        item.label = (
-          <a href={item.path} target="_blank" rel="noopener noreferrer">
-            {item.menu_name}
-          </a>
-        )
-      } else {
-        item.label = item.menu_name
-      }
-      if (item.icon) {
-        item.icon = React.createElement(Icon[item.icon])
-      }
-      item.key = item.path
-      if (item.children && item.children.length) {
-        //item.key = 'SubMenu'
-        changeKey(item.children)
+      if (!item.hidden) {
+        if (item.is_out_link) {
+          item.label = (
+            <a href={item.path} target="_blank" rel="noopener noreferrer">
+              {item.menu_name}
+            </a>
+          )
+        } else {
+          item.label = item.menu_name
+        }
+        if (item.icon) {
+          item.icon = React.createElement(Icon[item.icon])
+        }
+        item.key = item.path
+        if (item.children && item.children.length) {
+          //item.key = item.path
+          changeKey(item.children)
+        }
       }
     })
   }
@@ -71,8 +74,15 @@ function getMenus(menus) {
 }
 
 function PageLayout() {
-  const { menu } = useAppSelector((state) => ({
-    menu: state.user.menu,
+  const { menu } = useAppSelector(
+    (state) => ({
+      menu: state.user.menu,
+    }),
+    shallowEqual,
+  )
+  const { isShowTags, isShowBread } = useAppSelector((state) => ({
+    isShowTags: state.setting.isShowTags,
+    isShowBread: state.setting.isShowBreadcrumb,
   }))
   const [collapsed, setCollapsed] = useState(false) //侧边栏开关
   const setSiderCollapsed = useCallback((v: boolean) => {
@@ -82,7 +92,6 @@ function PageLayout() {
   const menus = useMemo(() => getMenus(menu), [menu]) //转成符合antd menu格式
   const [selectedKeys, setSelectedKeys] = useState(['']) //默认选中，根据登录后的跳转地址设置
   const [defaultOpenKeys, setDefaultOpenKeys] = useState(['']) //submenu选中
-  const [isShowTags, setShowTags] = useState(true) //是否展示tags
   const [tagsObj, setTagsObj] = useState<any>({}) //Tags信息
   const [bread, setBread] = useState(['']) //面包屑名称
   const nav = useNavigate()
@@ -99,8 +108,8 @@ function PageLayout() {
     function getSubMenu(key, menus) {
       menus.forEach((item) => {
         if (key.includes(item.path)) {
-          selectArr.push(item.path)
           bread.push(item.menu_name)
+          selectArr.push(item.key)
           if (item.children && item.children.length) {
             getSubMenu(key, item.children)
           }
@@ -108,8 +117,9 @@ function PageLayout() {
       })
     }
     getSubMenu(key, menus)
-    console.log('selectArr', selectArr, bread)
     setBread(bread)
+    console.log('selectArr', selectArr)
+    console.log('menus', menus)
     setDefaultOpenKeys(selectArr)
   }
 
@@ -143,11 +153,13 @@ function PageLayout() {
         <NavBar collapsed={collapsed} setCollapsed={setSiderCollapsed}></NavBar>
         <Tags tagsObj={tagsObj} isShow={isShowTags}></Tags>
         <div className={styles['layout-content']}>
-          <Breadcrumb className={styles['breadcrumb']}>
-            {bread.map((item) => {
-              return <Breadcrumb.Item key={item}>{item}</Breadcrumb.Item>
-            })}
-          </Breadcrumb>
+          {isShowBread && (
+            <Breadcrumb className={styles['breadcrumb']}>
+              {bread.map((item) => {
+                return <Breadcrumb.Item key={item}>{item}</Breadcrumb.Item>
+              })}
+            </Breadcrumb>
+          )}
           <Content className={styles['content']}>
             <Routes>
               {routes.map((item) => {

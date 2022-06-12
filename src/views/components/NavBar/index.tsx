@@ -1,9 +1,10 @@
 import React from 'react'
 import { memo } from 'react'
-
+import { Avatar } from 'antd'
 import { Header } from 'antd/lib/layout/layout'
 import * as Icon from '@ant-design/icons'
-import styles from '../../layout/layout.module.less'
+import styles from './navBar.module.less'
+import { useAppSelector } from '@/store/hook'
 
 interface IProps {
   collapsed: boolean
@@ -12,6 +13,7 @@ interface IProps {
 
 function NavBar(props: IProps) {
   const { collapsed, setCollapsed } = props
+  const { avatar, username } = useAppSelector((state) => state.user.user)
   return (
     <Header className={styles['header']}>
       <div>
@@ -22,6 +24,10 @@ function NavBar(props: IProps) {
             onClick: () => setCollapsed(!collapsed),
           },
         )}
+      </div>
+      <div className={styles.right}>
+        <Avatar src={avatar}></Avatar>
+        <span>{username}</span>
       </div>
     </Header>
   )

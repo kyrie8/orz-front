@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import { Tag } from 'antd'
 import styles from './tags.module.less'
 import local from '@/utils/storage'
+import routes from '@/router'
 
 type ITags = { key: string; label: string }
 
@@ -13,10 +14,11 @@ export interface IProps {
 
 const color = 'magenta'
 
+const fixTag = { key: routes[0].path, label: routes[0].menu_name }
+
 const Tags: React.FC<IProps> = (props) => {
   const { isShow, tagsObj } = props
-  const [tags, setTags] = useState([{ key: '/home', label: '首页' }])
-  const [isSimilar, setSimilar] = useState(false)
+  const [tags, setTags] = useState([fixTag])
   const nav = useNavigate()
   const location = useLocation()
 
@@ -40,12 +42,14 @@ const Tags: React.FC<IProps> = (props) => {
     }
   }
 
-  function close(e: React.MouseEvent<HTMLElement>, i: number) {
+  function close(e: React.MouseEvent<HTMLElement>, path: string, i: number) {
     e.preventDefault()
     //const length = tags.length - 1
     const arr = [...tags]
-    const { key } = arr[i - 1]
-    nav(key)
+    if (path === location.pathname) {
+      const { key } = arr[i - 1]
+      nav(key)
+    }
     arr.splice(i, 1)
     setTags(arr)
     local.setStorage('tags', arr)
@@ -62,7 +66,7 @@ const Tags: React.FC<IProps> = (props) => {
               key={item.key}
               color={location.pathname === item.key ? color : null}
               closable={item.key === '/home' ? false : true}
-              onClose={(e) => close(e, i)}
+              onClose={(e) => close(e, item.key, i)}
             >
               {item.label}
             </Tag>
