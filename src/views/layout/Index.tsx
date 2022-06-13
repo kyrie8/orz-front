@@ -43,6 +43,23 @@ function getFlatRoutes(routes) {
   return res
 }
 
+function config(pathname) {
+  const path = pathname.slice(1).split('/')
+  const selectKey = []
+  let ele = ''
+  for (let index = 0; index < path.length; index++) {
+    if (index) {
+      ele = ele + '/' + path[index]
+    } else {
+      ele = '/' + path[0]
+    }
+    //ele = ele + '/' + paths[0]
+    selectKey.push(ele)
+  }
+  console.log('selectKey', selectKey)
+  return selectKey
+}
+
 //TODO 考虑新的路由写法和菜单写法？
 function getMenus(menus) {
   const menuArr = JSON.parse(JSON.stringify(menus))
@@ -63,7 +80,7 @@ function getMenus(menus) {
         }
         item.key = item.path
         if (item.children && item.children.length) {
-          //item.key = item.path
+          //item.key = item.path.slice(1)
           changeKey(item.children)
         }
       }
@@ -85,17 +102,15 @@ function PageLayout() {
     isShowBread: state.setting.isShowBreadcrumb,
   }))
   const [collapsed, setCollapsed] = useState(false) //侧边栏开关
-  const setSiderCollapsed = useCallback((v: boolean) => {
-    setCollapsed(v)
-  }, [])
   const routes: IRoutes[] = useMemo(() => getFlatRoutes(menu), [menu]) //路由扁平
   const menus = useMemo(() => getMenus(menu), [menu]) //转成符合antd menu格式
   const [selectedKeys, setSelectedKeys] = useState(['']) //默认选中，根据登录后的跳转地址设置
-  const [defaultOpenKeys, setDefaultOpenKeys] = useState(['']) //submenu选中
+  const local = useLocation()
+  const selectKey = useMemo(() => config(local.pathname), [local.pathname])
+  const [defaultOpenKeys] = useState<string[]>(selectKey) //submenu选中
   const [tagsObj, setTagsObj] = useState<any>({}) //Tags信息
   const [bread, setBread] = useState(['']) //面包屑名称
   const nav = useNavigate()
-  const local = useLocation()
 
   useEffect(() => {
     setSelectedKeys([local.pathname])
@@ -103,13 +118,11 @@ function PageLayout() {
   }, [local.pathname])
 
   function selectOpenKeys(key) {
-    const selectArr = [] //key值
     const bread = [] //name
     function getSubMenu(key, menus) {
       menus.forEach((item) => {
         if (key.includes(item.path)) {
           bread.push(item.menu_name)
-          selectArr.push(item.key)
           if (item.children && item.children.length) {
             getSubMenu(key, item.children)
           }
@@ -118,9 +131,6 @@ function PageLayout() {
     }
     getSubMenu(key, menus)
     setBread(bread)
-    console.log('selectArr', selectArr)
-    console.log('menus', menus)
-    setDefaultOpenKeys(selectArr)
   }
 
   function selectMenuItem(v) {
@@ -145,12 +155,14 @@ function PageLayout() {
           mode="inline"
           onSelect={(v) => selectMenuItem(v)}
           selectedKeys={selectedKeys}
-          openKeys={defaultOpenKeys}
-          onOpenChange={(key) => setDefaultOpenKeys(key)}
+          defaultOpenKeys={defaultOpenKeys}
         />
       </Sider>
       <Layout className={styles['layout-wrapper']}>
-        <NavBar collapsed={collapsed} setCollapsed={setSiderCollapsed}></NavBar>
+        <NavBar
+          collapsed={collapsed}
+          setCollapsed={(v) => setCollapsed(v)}
+        ></NavBar>
         <Tags tagsObj={tagsObj} isShow={isShowTags}></Tags>
         <div className={styles['layout-content']}>
           {isShowBread && (

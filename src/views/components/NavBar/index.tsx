@@ -1,6 +1,6 @@
 import React from 'react'
 import { memo } from 'react'
-import { Avatar } from 'antd'
+import { Avatar, Button } from 'antd'
 import { Header } from 'antd/lib/layout/layout'
 import * as Icon from '@ant-design/icons'
 import styles from './navBar.module.less'
@@ -20,7 +20,7 @@ function NavBar(props: IProps) {
         {React.createElement(
           collapsed ? Icon.MenuUnfoldOutlined : Icon.MenuFoldOutlined,
           {
-            className: 'trigger',
+            className: styles['trigger'],
             onClick: () => setCollapsed(!collapsed),
           },
         )}
