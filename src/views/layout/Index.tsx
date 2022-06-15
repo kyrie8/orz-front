@@ -56,7 +56,6 @@ function config(pathname) {
     //ele = ele + '/' + paths[0]
     selectKey.push(ele)
   }
-  console.log('selectKey', selectKey)
   return selectKey
 }
 
@@ -148,7 +147,19 @@ function PageLayout() {
   return (
     <Layout className={styles.layout}>
       <Sider trigger={null} collapsible collapsed={collapsed}>
-        <div className={styles['logo']} />
+        <div
+          className={`${styles.logo} ${
+            collapsed ? styles['logo-collapsed'] : ''
+          }`}
+        >
+          <span>
+            <img
+              src="https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg"
+              alt=""
+            />
+            {collapsed ? null : <h1>React管理后台</h1>}
+          </span>
+        </div>
         <Menu
           items={menus}
           theme="dark"
@@ -161,7 +172,7 @@ function PageLayout() {
       <Layout className={styles['layout-wrapper']}>
         <NavBar
           collapsed={collapsed}
-          setCollapsed={(v) => setCollapsed(v)}
+          setCollapsed={() => setCollapsed(!collapsed)}
         ></NavBar>
         <Tags tagsObj={tagsObj} isShow={isShowTags}></Tags>
         <div className={styles['layout-content']}>

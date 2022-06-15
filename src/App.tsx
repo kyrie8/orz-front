@@ -3,6 +3,7 @@ import {
   unstable_HistoryRouter as HistoryRouter,
   Route,
   Routes,
+  useLocation,
 } from 'react-router-dom'
 import { createBrowserHistory } from 'history'
 
@@ -17,11 +18,12 @@ function App() {
   const { token } = useAppSelector((state) => ({
     token: state.user.token,
   }))
-  const [routes, setRoutes] = useState([])
   useEffect(() => {
     if (!token) {
       history.replace('/login')
       return
+    } else if (token && history.location.pathname === '/') {
+      history.replace('/home')
     }
   }, [])
   return (

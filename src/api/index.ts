@@ -1,5 +1,6 @@
 import { AxiosRequestConfig } from 'axios'
 import Request from './request'
+import local from '@/utils/storage'
 
 const request = new Request({
   baseURL: 'http://localhost:3000/',
@@ -7,7 +8,7 @@ const request = new Request({
   interceptors: {
     requestInterceptors: (config: AxiosRequestConfig) => {
       // 携带token的拦截
-      const token = 'token'
+      const { token } = local.getStorage('user')
       if (token) {
         config.headers['Authorization'] = `Bearer ${token}`
       }
