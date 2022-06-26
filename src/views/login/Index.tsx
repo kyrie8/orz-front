@@ -9,7 +9,7 @@ import { asyncLogin } from '@/store/modules/userStore'
 
 function Login() {
   const dispatch = useAppDispatch()
-  const onFinish = (v: IAccount) => {
+  const onFinish = async (v: IAccount) => {
     dispatch(asyncLogin(v))
   }
   return (

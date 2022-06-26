@@ -10,8 +10,8 @@ class Request {
     this.interceptors = config.interceptors
 
     this.instance.interceptors.request.use(
-      (value: AxiosRequestConfig) => {
-        return value
+      (config: AxiosRequestConfig) => {
+        return config
       },
       (err: unknown) => err,
     )
@@ -54,6 +54,7 @@ class Request {
   }
 
   post<T = unknown>(config: RequestConfig<T>): Promise<T> {
+    console.log(config)
     return this.request<T>({ ...config, method: 'POST' })
   }
 

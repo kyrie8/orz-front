@@ -38,7 +38,9 @@ export const userSlice = createSlice({
 export const asyncLogin = createAsyncThunk(
   'user/setInfo',
   async (data: IAccount) => {
+    console.log('data', data)
     const res = await login(data)
+    console.log('res', res)
     if (res.code === 200) {
       return res.data
     }
