@@ -1,5 +1,6 @@
 import { memo, useEffect, useState } from 'react'
 import { getUserList } from '@/service/user'
+import catchApi from '@/utils/catchApi'
 import { Button, Divider, Form, Input, Space, Tag } from 'antd'
 import Table, { ColumnsType } from 'antd/lib/table'
 
@@ -71,9 +72,10 @@ function User() {
   }, [params])
   const getList = async (v = {}) => {
     setLoading(true)
+    const [res] = await catchApi(getUserList({ ...params, ...v }))
     const {
       data: { list, total },
-    } = await getUserList({ ...params, ...v })
+    } = res
     setLoading(false)
     setTotal(total)
     setData(list)

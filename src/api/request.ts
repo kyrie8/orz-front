@@ -25,7 +25,7 @@ class Request {
     )
     this.instance.interceptors.response.use(
       (res: AxiosResponse) => res.data,
-      (err: unknown) => err,
+      (err: unknown) => Promise.reject(err),
     )
   }
   request<T>(config: RequestConfig): Promise<T> {
