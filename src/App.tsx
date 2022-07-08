@@ -1,9 +1,8 @@
-import { memo, useEffect, useState } from 'react'
+import { memo, useEffect } from 'react'
 import {
   unstable_HistoryRouter as HistoryRouter,
   Route,
   Routes,
-  useLocation,
 } from 'react-router-dom'
 import { createBrowserHistory } from 'history'
 

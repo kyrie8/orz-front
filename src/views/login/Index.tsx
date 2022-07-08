@@ -6,6 +6,7 @@ import styles from './login.module.less'
 import { login, IAccount } from '@/service/login'
 import { useAppDispatch } from '@/store/hook'
 import { asyncLogin } from '@/store/modules/userStore'
+import { LockOutlined, UserOutlined } from '@ant-design/icons'
 
 function Login() {
   const dispatch = useAppDispatch()
@@ -18,35 +19,35 @@ function Login() {
         <div className={styles[`login-from`]}>
           <Form
             name="basic"
-            labelCol={{ span: 8 }}
-            wrapperCol={{ span: 16 }}
             initialValues={{ remember: true }}
             onFinish={onFinish}
             autoComplete="off"
           >
             <Form.Item
-              label="Username"
               name="username"
               rules={[
                 { required: true, message: 'Please input your username!' },
               ]}
             >
-              <Input />
+              <Input prefix={<UserOutlined />} />
             </Form.Item>
 
             <Form.Item
-              label="Password"
               name="password"
               rules={[
                 { required: true, message: 'Please input your password!' },
               ]}
             >
-              <Input.Password />
+              <Input.Password prefix={<LockOutlined />} />
             </Form.Item>
 
-            <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-              <Button type="primary" htmlType="submit">
-                Submit
+            <Form.Item>
+              <Button
+                type="primary"
+                htmlType="submit"
+                style={{ width: '100%' }}
+              >
+                login in
               </Button>
             </Form.Item>
           </Form>

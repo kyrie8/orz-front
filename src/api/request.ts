@@ -1,6 +1,8 @@
 import axios, { AxiosResponse } from 'axios'
 import type { AxiosInstance, AxiosRequestConfig } from 'axios'
 import type { RequestConfig, RequestInterceptors } from './type'
+import { Modal } from 'antd'
+import { history } from '@/App'
 class Request {
   private instance: AxiosInstance
   private interceptors?: RequestInterceptors
@@ -25,7 +27,17 @@ class Request {
     )
     this.instance.interceptors.response.use(
       (res: AxiosResponse) => res.data,
-      (err: unknown) => Promise.reject(err),
+      (err: any) => {
+        if (err.response.data.code === 401) {
+          Modal.info({
+            title: '提示',
+            content: `用户登录信息过期`,
+            onOk() {
+              history.replace('/login')
+            },
+          })
+        }
+      },
     )
   }
   request<T>(config: RequestConfig): Promise<T> {
