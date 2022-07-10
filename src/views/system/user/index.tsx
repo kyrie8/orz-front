@@ -193,6 +193,7 @@ function User() {
           rowKey={(record) => record.user_id}
           pagination={paginationProps}
           dataSource={data}
+          scroll={{ x: 'max-content', y: `calc(100vh - 390px)` }}
         >
           {columns.map((item) => {
             if (item.key === 'action') {

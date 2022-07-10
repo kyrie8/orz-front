@@ -196,6 +196,9 @@ function PageLayout() {
               })}
             </Routes>
             <Outlet></Outlet>
+            <div className={styles['footer']}>
+              <span>hhhhhh</span>
+            </div>
           </Content>
         </div>
       </Layout>
