@@ -3,7 +3,7 @@ import Request from './request'
 import local from '@/utils/storage'
 
 const request = new Request({
-  baseURL: 'http://127.0.0.1:3000/',
+  baseURL: 'http://42.193.137.216:3000/',
   timeout: 100000,
   interceptors: {
     requestInterceptors: (config: AxiosRequestConfig) => {
